@@ -13,6 +13,7 @@ class NHLModel:
         #Data frames of each year
         self.dfs = [pd.read_csv(f'{file}.csv') for file in self.files]
         self.teams = self.dfs[0]['team'].unique().tolist()
+        self.positions = self.dfs[0]['position'].unique().tolist()
 
     def get_df(self,year):
         """

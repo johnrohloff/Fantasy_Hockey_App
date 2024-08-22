@@ -32,19 +32,21 @@ class NHLController:
             [Input(component_id='select_data', component_property='value'),
              Input(component_id='select_year', component_property='value'),
              Input(component_id='select_graph', component_property='value'),
-             Input(component_id='select_teams', component_property='value')
+             Input(component_id='select_teams', component_property='value'),
+             Input(component_id='select_position', component_property='value'),
 
              ]
         )
 
-        def update_graph(data_selected, year_selected, graph_selected, team_selected):
+        def update_graph(data_selected, year_selected, graph_selected, team_selected, position_selected):
             """
             Updates the output_container based on the selected choice
             :param data_selected:
             :return: Selected choice
             """
 
-            container = f' Real Data: {data_selected}, Year Selected: {year_selected}, Graph Selected: {graph_selected}'
+            container = f' Real Data: {data_selected}, Year Selected: {year_selected}, Graph Selected: {graph_selected}' \
+                        f'Teams Selected: {team_selected}, Position: {position_selected}'
 
             #Grab the data for the selected year
             if year_selected is not None:

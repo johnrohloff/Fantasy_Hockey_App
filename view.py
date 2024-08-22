@@ -83,6 +83,21 @@ class NHLView:
                          ], style={'width': "20%", 'display': 'inline-block'}
                          ),
 
+                # Dropdown of positions
+                html.Div(id="positions_block",
+                         children=[
+                             html.H5("Select Positions", style={'margin-top': '1px'}),
+                             dcc.Dropdown(id="select_position",
+                                          options=[
+                                              {"label": pos, "value": pos} for pos in self.model.positions
+                                          ],
+                                          multi=True,
+                                          placeholder="All Positions",
+                                          # style={'width': "40%", 'display':'inline-block', 'margin-left': '10px'}
+                                          ),
+                         ], style={'width': "20%", 'display': 'inline-block'}
+                         ),
+
                 html.Div(id='output_container')
             ])
         ])
