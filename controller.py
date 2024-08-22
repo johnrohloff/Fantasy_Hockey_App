@@ -1,5 +1,8 @@
 import dash
+import plotly.express as px
 from dash.dependencies import Input, Output
+
+import model
 
 
 class NHLController:
@@ -26,16 +29,32 @@ class NHLController:
         """
         @self.app.callback(
             Output(component_id='output_container', component_property='children'),
-            [Input(component_id='select_data', component_property='value')]
+            [Input(component_id='select_data', component_property='value'),
+             Input(component_id='select_year', component_property='value'),
+             Input(component_id='select_graph', component_property='value'),
+             Input(component_id='select_teams', component_property='value')
+
+             ]
         )
 
-        def update_graph(data_selected):
+        def update_graph(data_selected, year_selected, graph_selected, team_selected):
             """
             Updates the output_container based on the selected choice
             :param data_selected:
             :return: Selected choice
             """
-            if data_selected:
-                return 'Real'
+
+            container = f' Real Data: {data_selected}, Year Selected: {year_selected}, Graph Selected: {graph_selected}'
+
+            #Grab the data for the selected year
+            if year_selected is not None:
+                dfs = self.model.get_df(year_selected)
             else:
-                return "Fantasy"
+                dfs = None
+
+            if team_selected in self.model.teams:
+                return team_selected
+
+            print(dfs)
+            print(container)
+            return data_selected, year_selected
