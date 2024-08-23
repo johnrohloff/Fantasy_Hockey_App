@@ -1,5 +1,6 @@
 import dash
 import plotly.express as px
+from dash import dcc
 from dash.dependencies import Input, Output
 
 import model
@@ -34,29 +35,51 @@ class NHLController:
              Input(component_id='select_graph', component_property='value'),
              Input(component_id='select_teams', component_property='value'),
              Input(component_id='select_position', component_property='value'),
-
+             Input(component_id='select_stat', component_property='value'),
              ]
         )
-
-        def update_graph(data_selected, year_selected, graph_selected, team_selected, position_selected):
+        def update_graph(data_selected, year_selected, graph_selected, team_selected, position_selected,
+                         stat_selected):
             """
             Updates the output_container based on the selected choice
             :param data_selected:
             :return: Selected choice
             """
-
+            fig = {}
             container = f' Real Data: {data_selected}, Year Selected: {year_selected}, Graph Selected: {graph_selected}' \
-                        f'Teams Selected: {team_selected}, Position: {position_selected}'
+                        f'Teams Selected: {team_selected}, Position: {position_selected}, Stat: {stat_selected}'
 
-            #Grab the data for the selected year
-            if year_selected is not None:
-                dfs = self.model.get_df(year_selected)
-            else:
-                dfs = None
+            #Data set for the selected year
+            dfs = self.model.get_df(year_selected)
 
-            if team_selected in self.model.teams:
-                return team_selected
+            #Filter by teams
+            if team_selected:
+                dfs = dfs[dfs['team'].isin(team_selected)]
 
-            print(dfs)
+            #Filter by position
+            if position_selected:
+                dfs = dfs[dfs['position'].isin(position_selected)]
+
+            #Graphs for real statistics
+            if data_selected:
+                if graph_selected == 'bar':
+                    selected_result = dfs.nlargest(5, stat_selected)
+                    fig = px.bar(
+                        selected_result,
+                        x='name',
+                        y=stat_selected,
+                        title=f'Top 10 {position_selected} Ranked By {stat_selected.capitalize()}'
+                    )
+
+                #Scatter plot chart
+                elif graph_selected == 'scatter':
+                    selected_result = dfs.nlargest(5, stat_selected)
+                    fig = px.scatter(
+                        selected_result,
+                        x='name',
+                        y=stat_selected,
+                        title=f'Top 5 {position_selected} Ranked By {stat_selected.capitalize()}'
+                    )
+
             print(container)
-            return data_selected, year_selected
+            return dcc.Graph(figure=fig)

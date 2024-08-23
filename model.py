@@ -15,6 +15,20 @@ class NHLModel:
         self.teams = self.dfs[0]['team'].unique().tolist()
         self.positions = self.dfs[0]['position'].unique().tolist()
 
+        # All selectable stats
+        self.all_options = [
+            {"label": "Points", "value": "points"},
+            {"label": "Goals", "value": "goals"},
+            {"label": "Assists", "value": "assists"},
+            {"label": "Shots", "value": "shots_on_goal"},
+            {"label": "Takeaways", "value": "takeaways"},
+            {"label": "Giveaways", "value": "giveaways"},
+            {"label": "Blocked Shots", "value": "blocked_shots"},
+            {"label": "Hits", "value": "hits"},
+            {"label": "Penalty Mins", "value": "penalty_mins"},
+            {"label": "Penalties Drawn", "value": "penaltiesdrawn"}
+        ]
+
     def get_df(self,year):
         """
         Gets the dataframe based on the specified key name

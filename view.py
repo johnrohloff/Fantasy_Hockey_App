@@ -93,7 +93,18 @@ class NHLView:
                                           ],
                                           multi=True,
                                           placeholder="All Positions",
-                                          # style={'width': "40%", 'display':'inline-block', 'margin-left': '10px'}
+                                          ),
+                         ], style={'width': "20%", 'display': 'inline-block'}
+                         ),
+
+                # Statistic to show (ie. Points/Goals/Assists)
+                html.Div(id="select_stats_block",
+                         children=[
+                             html.H5("Select Stats", style={'margin-top': '1px'}),
+                             dcc.Dropdown(id="select_stat",
+                                          options=self.model.all_options,
+                                          multi=False,
+                                          value='points',
                                           ),
                          ], style={'width': "20%", 'display': 'inline-block'}
                          ),
