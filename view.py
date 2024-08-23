@@ -124,6 +124,20 @@ class NHLView:
                          ], style={'width': "20%", 'display': 'inline-block'}
                          ),
 
+                # Slider to represent number of players
+                html.H5("Select Num. Players", style={'margin-top': '1px'}),
+                html.Div([
+                    dcc.Slider(
+                               id='slider_value',
+                               value=20,
+                               marks={i: str(i) for i in range(0, 1001, 50)},
+                               min=0,
+                               max=1000,
+                               step=50,
+                               tooltip={"placement": "bottom", "always_visible": True}
+                               )
+                ], id='slider_container'),
+
                 html.Div(id='output_container')
             ])
         ])
