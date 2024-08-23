@@ -3,7 +3,6 @@ from dash import dcc
 from dash import html
 
 import model
-import view
 
 
 class NHLView:
@@ -44,8 +43,8 @@ class NHLView:
                              html.H5("Select Year", style={'margin-top': '1px'}),
                              dcc.Dropdown(id="select_year",
                                           options=[
-                                              {"label": "2022-2023", "value": '2022'},
                                               {"label": "2023-2024", "value": '2023'},
+                                              {"label": "2022-2023", "value": '2022'},
                                           ],
                                           multi=False,
                                           placeholder="Select Year",
@@ -97,12 +96,28 @@ class NHLView:
                          ], style={'width': "20%", 'display': 'inline-block'}
                          ),
 
+                # Filter stats based on situations (5v5, 5v4, 4v5)
+                html.Div(id="stat_filter_block",
+                         children=[
+                             html.H5("Select Stat Filter", style={'margin-top': '1px'}),
+                             dcc.Dropdown(id="select_stat_filter",
+                                          options=[
+                                              {"label": "All", "value": "all_situations"},
+                                              {"label": "Powerplay", "value": "powerplay"},
+                                              {"label": "Penalty Kill", "value": "penalty_kill"}
+                                          ],
+                                          multi=False,
+                                          value='all_situations',
+                                          ),
+                         ], style={'width': "20%", 'display': 'inline-block'}
+                         ),
+
                 # Statistic to show (ie. Points/Goals/Assists)
                 html.Div(id="select_stats_block",
                          children=[
                              html.H5("Select Stats", style={'margin-top': '1px'}),
                              dcc.Dropdown(id="select_stat",
-                                          options=self.model.all_options,
+                                          options=[],
                                           multi=False,
                                           value='points',
                                           ),

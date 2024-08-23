@@ -35,6 +35,7 @@ class NHLController:
              Input(component_id='select_graph', component_property='value'),
              Input(component_id='select_teams', component_property='value'),
              Input(component_id='select_position', component_property='value'),
+             #Input(component_id='select_stat_filter', component_property='value'),
              Input(component_id='select_stat', component_property='value'),
              ]
         )
@@ -83,3 +84,18 @@ class NHLController:
 
             print(container)
             return dcc.Graph(figure=fig)
+
+        #Callback for updating stat options
+        @self.app.callback(
+            Output(component_id='select_stat', component_property='options'),
+            [Input(component_id='select_stat_filter', component_property='value')]
+        )
+        def update_stat_options(stat_filter_selected):
+            if stat_filter_selected == 'all_situations':
+                return self.model.all_options
+            elif stat_filter_selected == 'powerplay':
+                return self.model.pp_options
+            elif stat_filter_selected == 'penalty_kill':
+                return self.model.pk_options
+            else:
+                return []

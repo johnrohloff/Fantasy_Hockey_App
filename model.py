@@ -15,7 +15,7 @@ class NHLModel:
         self.teams = self.dfs[0]['team'].unique().tolist()
         self.positions = self.dfs[0]['position'].unique().tolist()
 
-        # All selectable stats
+        # Selectable stats for all situations (5v5, 5v4, 4v5...)
         self.all_options = [
             {"label": "Points", "value": "points"},
             {"label": "Goals", "value": "goals"},
@@ -29,6 +29,17 @@ class NHLModel:
             {"label": "Penalties Drawn", "value": "penaltiesdrawn"}
         ]
 
+        #Selectable stats for powerplay situations (5v4, 5v3...)
+        self.pp_options = [{"label": "PP Points", "value": "pp_points"},
+            {"label": "PP Goals", "value": "pp_goals"},
+            {"label": "PP Assists", "value": "pp_assists"}]
+
+        #Selectable stats for penalty kill situations (4v5, 3v5)
+        self.pk_options = [{"label": "PK Points", "value": "pk_points"},
+            {"label": "PK Goals", "value": "pk_goals"},
+            {"label": "PK Assists", "value": "pk_assists"}]
+
+    #Grabs the dataframe of the selected year
     def get_df(self,year):
         """
         Gets the dataframe based on the specified key name
@@ -36,9 +47,9 @@ class NHLModel:
         :param file: File name (String) without .csv extension
         :return: Returns the dataframe of the selected file name
         """
-        if year == '2022':
+        if year == '2023':
             return self.dfs[0]
-        elif year == '2023':
+        elif year == '2022':
             return self.dfs[1]
         else:
             return None
