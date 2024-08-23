@@ -36,11 +36,12 @@ class NHLController:
              Input(component_id='select_teams', component_property='value'),
              Input(component_id='select_position', component_property='value'),
              Input(component_id='select_stat', component_property='value'),
+             Input(component_id='select_stat2', component_property='value'),
              Input(component_id='slider_value', component_property='value')
              ]
         )
         def update_graph(data_selected, year_selected, graph_selected, team_selected, position_selected,
-                         stat_selected, slider_val):
+                         stat_selected, stat2_selected, slider_val):
             """
             Updates the output_container based on the selected choice
             :param data_selected:
@@ -49,7 +50,7 @@ class NHLController:
             fig = {}
             container = f' Real Data: {data_selected}, Year Selected: {year_selected}, Graph Selected: {graph_selected}' \
                         f'Teams Selected: {team_selected}, Position: {position_selected}, Stat: {stat_selected},' \
-                        f' Slider: {slider_val}'
+                        f' Stat 2: {stat2_selected}, Slider: {slider_val}'
 
             #Data set for the selected year
             dfs = self.model.get_df(year_selected)
@@ -78,9 +79,11 @@ class NHLController:
                     selected_result = dfs.nlargest(slider_val, stat_selected)
                     fig = px.scatter(
                         selected_result,
-                        x='name',
+                        x=stat2_selected,
                         y=stat_selected,
-                        title=f'Top 5 {position_selected} Ranked By {stat_selected.capitalize()}'
+                        title=f'Top 5 {position_selected} Ranked By {stat_selected.capitalize()}',
+                        labels = {'name': 'Player Name', stat_selected: stat_selected.capitalize()},
+                        hover_data = {'name': True},
                     )
 
             print(container)
@@ -89,12 +92,13 @@ class NHLController:
         #Callback to update stat_options based on the selected filter (All, PP, PK)
         @self.app.callback(
             Output(component_id='select_stat', component_property='options'),
+            Output(component_id='select_stat2', component_property='options'),
             [Input(component_id='select_stat_filter', component_property='value')]
         )
         #Returns the selectable options based on the situation
         def update_stat_options(stat_filter_selected):
             if stat_filter_selected == 'all_situations':
-                return self.model.all_options
+                return self.model.all_options, self.model.all_options
             elif stat_filter_selected == 'powerplay':
                 return self.model.pp_options
             elif stat_filter_selected == 'penalty_kill':
@@ -117,9 +121,22 @@ class NHLController:
                 max_val = 100
                 min_val = 0
                 step_val = 10
+
             else:
                 marks_val = {i: str(i) for i in range(0, 501, 50)}
                 max_val = 500
                 min_val = 0
                 step_val = 50
             return marks_val, max_val, min_val, step_val
+
+        #Callback for updating selectable dropdowns based on graph chosen
+        @self.app.callback(
+            Output(component_id='select_stats_block2', component_property='style'),
+            [Input(component_id='select_graph', component_property='value')]
+        )
+        #Show/Hide select_stat2 dropdown
+        def update_dropdowns(select_graph):
+            if select_graph == 'scatter':
+                return {'width': "20%", 'display': 'inline-block'}
+            else:
+                return {'width': "20%", 'display': 'none'}

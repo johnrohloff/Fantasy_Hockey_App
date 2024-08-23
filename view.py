@@ -124,6 +124,18 @@ class NHLView:
                          ], style={'width': "20%", 'display': 'inline-block'}
                          ),
 
+                #2nd Statistic to show (ie. Points/Goals/Assists)
+                html.Div(id="select_stats_block2",
+                         children=[
+                             html.H5("Stat 2", style={'margin-top': '1px'}),
+                             dcc.Dropdown(id="select_stat2",
+                                          options=[],
+                                          multi=False,
+                                          value='points',
+                                          ),
+                         ], style={'width': "20%", 'display': 'none'}
+                         ),
+
                 # Slider to represent number of players
                 html.H5("Select Num. Players", style={'margin-top': '1px'}),
                 html.Div([
