@@ -3,7 +3,7 @@ from dash import dcc
 from dash import html
 
 import model
-from model import NHLModel
+from model import NHLModel, FantasyModel
 from view import NHLView
 from controller import NHLController
 
@@ -19,9 +19,10 @@ class NHLApp:
         """
         # Initialize the Dash app
         self.app = dash.Dash(__name__)
-        self.model = NHLModel(files)
-        self.view = NHLView(self.model)
-        self.controller = NHLController(self.app, self.model, self.view)
+        self.nhl_model = NHLModel(files)
+        self.fantasy_model = FantasyModel(files)
+        self.view = NHLView(self.nhl_model)
+        self.controller = NHLController(self.app, self.nhl_model, self.fantasy_model, self.view)
 
         # Set up the layout
         self.app.layout = self.view.create_layout()

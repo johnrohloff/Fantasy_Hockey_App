@@ -52,7 +52,7 @@ class NHLView:
                                               {"label": "2022-2023", "value": '2022'},
                                           ],
                                           multi=False,
-                                          placeholder="Select Year",
+                                          value="2023",
                                           ),
                          ], style={'width': "20%", 'display': 'inline-block'}
                          ),

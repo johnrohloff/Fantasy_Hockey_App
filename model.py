@@ -58,10 +58,10 @@ class NHLModel:
 #Subclass of NHLModel, expands and uses the NHLModel data but also incorporates its own features
 class FantasyModel(NHLModel):
     def __init__(self, files):
-        super.__init__(files)
+        super().__init__(files)
 
         #Default fantasy scoring values
-        f_scoring = {
+        self.f_scoring = {
             'f_goal': 2.0,
             'f_ppg': 1.0,
             'f_shg': 2.0,
@@ -75,6 +75,22 @@ class FantasyModel(NHLModel):
             'f_hit': 0.1,
             'f_block': 0.3,
         }
+
+        # All selectable stats
+        self.f_options = [
+            {"label": "Points", "value": "f_points"},
+            {"label": "Goals", "value": "f_goals"},
+            {"label": "PPG", "value": "f_ppg"},
+            {"label": "SHG", "value": "f_shg"},
+            {"label": "Assists", "value": "f_assists"},
+            {"label": "PPA", "value": "f_ppa"},
+            {"label": "SHA", "value": "f_sha"},
+            {"label": "Shots", "value": "f_sogs"},
+            {"label": "Takeaways", "value": "f_takeaways"},
+            {"label": "Giveaways", "value": "f_giveaways"},
+            {"label": "Blocked Shots", "value": "f_blocks"},
+            {"label": "Hits", "value": "f_hits"},
+        ]
 
     #Create new columns in our dataframe for fantasy scoring
     def calc_fantasy_stats(self, df, scoring):
@@ -91,8 +107,6 @@ class FantasyModel(NHLModel):
         df['f_hits'] = df['hits'] * scoring['f_hit']
         df['f_blocks'] = df['blocked_shots'] * scoring['f_block']
         return df
-
-
 
     #Default fantasy scores dictionary
     #Update fantasy scores function

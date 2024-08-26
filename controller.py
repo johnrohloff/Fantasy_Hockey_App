@@ -4,10 +4,10 @@ from dash import dcc
 from dash.dependencies import Input, Output
 
 import model
-
+from model import NHLModel, FantasyModel
 
 class NHLController:
-    def __init__(self,app, model, view):
+    def __init__(self,app, nhl_model, fantasy_model, view):
         """
         Initialize NHLController class
 
@@ -18,7 +18,8 @@ class NHLController:
 
         """
         self.app = app
-        self.model = model
+        self.nhl_model = nhl_model
+        self.fantasy_model = fantasy_model
         self.view = view
         self.register_callbacks()
 
@@ -38,6 +39,7 @@ class NHLController:
              Input(component_id='select_stat', component_property='value'),
              Input(component_id='select_stat2', component_property='value'),
              Input(component_id='slider_value', component_property='value')
+             # Input(component_id='select_f_stats', component_property='value')
              ]
         )
         def update_graph(data_selected, year_selected, graph_selected, team_selected, position_selected,
@@ -48,12 +50,16 @@ class NHLController:
             :return: Selected choice
             """
             fig = {}
+
             container = f' Real Data: {data_selected}, Year Selected: {year_selected}, Graph Selected: {graph_selected}' \
                         f'Teams Selected: {team_selected}, Position: {position_selected}, Stat: {stat_selected},' \
                         f' Stat 2: {stat2_selected}, Slider: {slider_val}'
 
-            #Data set for the selected year
-            dfs = self.model.get_df(year_selected)
+            #Assign dataframe for the selected year
+            dfs = self.nhl_model.get_df(year_selected)
+
+            #Add on the fantasy statistics to the dataframe selected
+            dfs = self.fantasy_model.calc_fantasy_stats(dfs, self.fantasy_model.f_scoring)
 
             #Filter by teams
             if team_selected:
@@ -85,11 +91,28 @@ class NHLController:
                         labels={'name': 'Player Name', stat_selected: stat_selected.capitalize()},
                         hover_data={'name': True},
                     )
-            # #Selected fantasy hockey display
-            # else:
-            #
 
+            ###---- Fantasy hockey display ---- ####
+            else:
+                if graph_selected == 'bar':
+                    selected_result = dfs.nlargest(slider_val, stat_selected)
+                    fig = px.bar(
+                        selected_result,
+                        x='name',
+                        y=stat_selected,
+                        title=f'Top 10 {position_selected} Ranked By {stat_selected.capitalize()}'
+                    )
 
+                elif graph_selected == 'scatter':
+                    selected_result = dfs.nlargest(slider_val, stat_selected)
+                    fig = px.scatter(
+                       selected_result,
+                       x=stat2_selected,
+                       y=stat_selected,
+                       title=f'Top 5 {position_selected} Ranked By {stat_selected.capitalize()}',
+                       labels={'name': 'Player Name', stat_selected: stat_selected.capitalize()},
+                       hover_data={'name': True},
+                   )
 
             print(container)
             return dcc.Graph(figure=fig)
@@ -98,18 +121,22 @@ class NHLController:
         @self.app.callback(
             Output(component_id='select_stat', component_property='options'),
             Output(component_id='select_stat2', component_property='options'),
-            [Input(component_id='select_stat_filter', component_property='value')]
+            [Input(component_id='select_data', component_property='value'),
+             Input(component_id='select_stat_filter', component_property='value')]
         )
         #Returns the selectable options based on the situation
-        def update_stat_options(stat_filter_selected):
-            if stat_filter_selected == 'all_situations':
-                return self.model.all_options, self.model.all_options
-            elif stat_filter_selected == 'powerplay':
-                return self.model.pp_options, self.model.pp_options
-            elif stat_filter_selected == 'penalty_kill':
-                return self.model.pk_options, self.model.pk_options
+        def update_stat_options(select_data, stat_filter_selected):
+            if select_data:
+                if stat_filter_selected == 'all_situations':
+                    return self.nhl_model.all_options, self.nhl_model.all_options
+                elif stat_filter_selected == 'powerplay':
+                    return self.nhl_model.pp_options, self.nhl_model.pp_options
+                elif stat_filter_selected == 'penalty_kill':
+                    return self.nhl_model.pk_options, self.nhl_model.pk_options
+
+            #Fantasy Display selected, return fantasy stat options, No 2nd dropdown options
             else:
-                return []
+                return self.fantasy_model.f_options, []
 
         #Callback to update the slider value based on the graph
         @self.app.callback(
@@ -132,9 +159,10 @@ class NHLController:
                 max_val = 500
                 min_val = 0
                 step_val = 50
+
             return marks_val, max_val, min_val, step_val
 
-        # #Callback for updating selectable dropdowns based on graph chosen
+        #Callback for updating selectable dropdowns based on graph chosen
         @self.app.callback(
             Output(component_id='stat_filter_block', component_property='style'),
             Output(component_id='select_stats_block2', component_property='style'),
