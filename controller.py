@@ -82,8 +82,8 @@ class NHLController:
                         x=stat2_selected,
                         y=stat_selected,
                         title=f'Top 5 {position_selected} Ranked By {stat_selected.capitalize()}',
-                        labels = {'name': 'Player Name', stat_selected: stat_selected.capitalize()},
-                        hover_data = {'name': True},
+                        labels={'name': 'Player Name', stat_selected: stat_selected.capitalize()},
+                        hover_data={'name': True},
                     )
 
             print(container)
