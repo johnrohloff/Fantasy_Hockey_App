@@ -27,15 +27,20 @@ class NHLView:
             # All UI Blocks
             html.Div([
 
-                # Select Real Data or Fantasy Hockey Data
-                dcc.RadioItems(id="select_data",
-                               options=[
-                                   {"label": "Real Statistics", "value": True},
-                                   {"label": "Fantasy Hockey", "value": False}
-                               ],
-                               value=True,
-                               style={'width': "20%", 'display': 'inline-block'}
-                               ),
+
+                html.Div(id="data_block",
+                         children=[
+                             html.H5("Data Displayed:", style={'margin-top': '1px'}),
+                             dcc.Dropdown(id="select_data",
+                                          options=[
+                                              {"label": "Real Statistics", "value": True},
+                                              {"label": "Fantasy Hockey", "value": False}
+                                          ],
+                                          multi=False,
+                                          value=True,
+                                          ),
+                         ], style={'width': "20%", 'display': 'inline-block'}
+                         ),
 
                 #Dropdown for the statistical year
                 html.Div(id="year_block",
