@@ -100,9 +100,9 @@ class NHLController:
             if stat_filter_selected == 'all_situations':
                 return self.model.all_options, self.model.all_options
             elif stat_filter_selected == 'powerplay':
-                return self.model.pp_options
+                return self.model.pp_options, self.model.pp_options
             elif stat_filter_selected == 'penalty_kill':
-                return self.model.pk_options
+                return self.model.pk_options, self.model.pk_options
             else:
                 return []
 
