@@ -85,6 +85,11 @@ class NHLController:
                         labels={'name': 'Player Name', stat_selected: stat_selected.capitalize()},
                         hover_data={'name': True},
                     )
+            # #Selected fantasy hockey display
+            # else:
+            #
+
+
 
             print(container)
             return dcc.Graph(figure=fig)
@@ -129,14 +134,23 @@ class NHLController:
                 step_val = 50
             return marks_val, max_val, min_val, step_val
 
-        #Callback for updating selectable dropdowns based on graph chosen
+        # #Callback for updating selectable dropdowns based on graph chosen
         @self.app.callback(
+            Output(component_id='stat_filter_block', component_property='style'),
             Output(component_id='select_stats_block2', component_property='style'),
-            [Input(component_id='select_graph', component_property='value')]
+            [Input(component_id='select_data', component_property='value'),
+             Input(component_id='select_graph', component_property='value')]
         )
         #Show/Hide select_stat2 dropdown
-        def update_dropdowns(select_graph):
-            if select_graph == 'scatter':
-                return {'width': "20%", 'display': 'inline-block'}
+        def update_dropdowns(select_data, select_graph):
+            #Real stat display: Show stat filter + stat 2 dropdown
+            if select_data and select_graph == 'scatter':
+                return {'width': "20%", 'display': 'inline-block'}, {'width': "20%", 'display': 'inline-block'}
+
+            #Real stat display: Show stat filter, don't show stat 2 dropdown
+            elif select_data and select_graph == 'bar':
+                return {'width': "20%", 'display': 'inline-block'}, {'width': "20%", 'display': 'none'}
+
+            #Fantasy display: Hide stat filter and stat 2 dropdown
             else:
-                return {'width': "20%", 'display': 'none'}
+                return  {'width': "20%", 'display': 'none'}, {'width': "20%", 'display': 'none'}

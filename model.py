@@ -56,7 +56,7 @@ class NHLModel:
 
 
 #Subclass of NHLModel, expands and uses the NHLModel data but also incorporates its own features
-class NHLFantasyModel(NHLModel):
+class FantasyModel(NHLModel):
     def __init__(self, files):
         super.__init__(files)
 
