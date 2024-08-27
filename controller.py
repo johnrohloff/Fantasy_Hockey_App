@@ -39,16 +39,25 @@ class NHLController:
              Input(component_id='select_position', component_property='value'),
              Input(component_id='select_stat', component_property='value'),
              Input(component_id='select_stat2', component_property='value'),
-             Input(component_id='slider_value', component_property='value')
-             ]
+             Input(component_id='slider_value', component_property='value'),]
+            + [Input(component_id=label, component_property='value') for label in self.fantasy_model.f_labels]
         )
         def update_graph(data_selected, year_selected, graph_selected, team_selected, position_selected,
-                         stat_selected, stat2_selected, slider_val):
+                         stat_selected, stat2_selected, slider_val, *f_inputs):
             """
             Updates the output_container based on the selected choice
             :param data_selected:
             :return: Selected choice
             """
+
+            # Convert f_inputs to a dictionary if needed
+            f_inputs_dict = dict(zip(self.fantasy_model.f_labels, f_inputs))
+
+            # Update your model with the fantasy inputs
+            updated_f_scoring = {label: value for label, value in f_inputs_dict.items()}
+            self.fantasy_model.update_scoring(updated_f_scoring)
+
+
             fig = {}
 
             container = f' Real Data: {data_selected}, Year Selected: {year_selected}, Graph Selected: {graph_selected}' \
@@ -145,23 +154,34 @@ class NHLController:
         #Callback for updating selectable dropdowns based on graph chosen
         @self.app.callback(
             Output(component_id='select_stat', component_property='options'),
-            #Output(component_id='select_stat', component_property='multi'),
             Output(component_id='select_stat2', component_property='options'),
             Output(component_id='select_stats_block2', component_property='style'),
+            Output(component_id='fantasy_scores_block', component_property='style'),
+
             [Input(component_id='select_data', component_property='value'),
              Input(component_id='select_graph', component_property='value')]
         )
         #Show/Hide select_stat2 dropdown
         def update_dropdowns(select_data, select_graph):
-            #Real stat display: Show stat 2 dropdown
-            if select_data and select_graph == 'bar':
-                return self.nhl_model.all_options, [], {'width': "20%", 'display': 'none'}
+            #Real data display
+            if select_data:
+                #Show bar graph dropdown format (1 Stat selection dropdown)
+                if select_graph == 'bar':
+                    return self.nhl_model.all_options, [], {'width': "20%", 'display': 'none'},\
+                           {'width': "20%", 'display': 'none'}
 
-            #Real stat display: Show stat filter, don't show stat 2 dropdown
-            elif select_data and select_graph == 'scatter':
-                return self.nhl_model.all_options,self.nhl_model.all_options, \
-                       {'width': "20%", 'display': 'inline-block'}
+                #Scatter plot display: (X,Y stat dropdowns)
+                else:
+                    return self.nhl_model.all_options, self.nhl_model.all_options, \
+                           {'width': "20%", 'display': 'inline-block'}, {'width': "20%", 'display': 'none'}
 
-            #Fantasy display: Hide stat stat 2 dropdown
+            #Fantasy display
             else:
-                return  self.fantasy_model.f_options, [], {'width': "20%", 'display': 'none'}
+                #Bar Graph
+                if select_graph == 'bar':
+                    return self.fantasy_model.f_options, [], {'width': "20%", 'display': 'none'},\
+                       {'width': "50%", 'display': 'inline-block'}
+                #Scatter Plot
+                else:
+                    return self.fantasy_model.f_options, self.fantasy_model.f_options, \
+                           {'width': "20%", 'display': 'inline-block'}, {'width': "20%", 'display': 'none'}

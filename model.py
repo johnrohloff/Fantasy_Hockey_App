@@ -88,6 +88,10 @@ class FantasyModel(NHLModel):
             {"label": "Hits", "value": "f_hits"},
         ]
 
+        #List of fantasy input values, used for updating f_scoring
+        self.f_labels = ['f_goal', 'f_ppg', 'f_shg','f_sog','f_assist','f_ppa','f_sha',
+                         'f_faceoff_win','f_takeaway','f_giveaway','f_hit','f_block']
+
     #Create new columns in our dataframe for fantasy scoring
     def calc_fantasy_stats(self, df, scoring):
         df['f_goals'] = df['goals'] * scoring['f_goal']
@@ -105,6 +109,9 @@ class FantasyModel(NHLModel):
         df['f_points'] = df[['f_goals', 'f_ppgs', 'f_shgs','f_sogs','f_assists','f_ppas','f_shas',
                              'f_faceoff_wins','f_takeaways','f_giveaways','f_hits','f_blocks']].sum(axis=1)
         return df
+
+    def update_scoring(self, scoring_values):
+        self.f_scoring.update(scoring_values)
 
     #Default fantasy scores dictionary
     #Update fantasy scores function

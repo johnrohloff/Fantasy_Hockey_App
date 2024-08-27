@@ -3,15 +3,17 @@ from dash import dcc
 from dash import html
 
 import model
+from model import NHLModel, FantasyModel
 
 
 class NHLView:
-    def __init__(self,model):
+    def __init__(self,nhl_model, fantasy_model):
         """
         Initializes the NHLView class
         And stores the layout of the application and stores it in the layout attribute.
         """
-        self.model = model
+        self.nhl_model = nhl_model
+        self.fantasy_model = fantasy_model
         self.layout = self.create_layout()
 
 
@@ -67,7 +69,7 @@ class NHLView:
                                               {"label": "Scatter", "value": "scatter"}
                                           ],
                                           multi=False,
-                                          placeholder="Select Graph Type",
+                                          value="bar",
                                           ),
                          ], style={'width': "20%", 'display': 'inline-block'}
                          ),
@@ -78,7 +80,7 @@ class NHLView:
                              html.H5("Select Teams", style={'margin-top': '1px'}),
                              dcc.Dropdown(id="select_teams",
                                           options=[
-                                              {"label": team, "value": team} for team in self.model.teams
+                                              {"label": team, "value": team} for team in self.nhl_model.teams
                                           ],
                                           multi=True,
                                           placeholder="All Teams",
@@ -93,7 +95,7 @@ class NHLView:
                              html.H5("Select Positions", style={'margin-top': '1px'}),
                              dcc.Dropdown(id="select_position",
                                           options=[
-                                              {"label": pos, "value": pos} for pos in self.model.positions
+                                              {"label": pos, "value": pos} for pos in self.nhl_model.positions
                                           ],
                                           multi=True,
                                           placeholder="All Positions",
@@ -125,6 +127,110 @@ class NHLView:
                          ], style={'width': "20%", 'display': 'none'}
                          ),
 
+                #Fantasy Scoring Inputs
+                html.Div(id='fantasy_scores_block', style={'display': 'none'},
+                         children=[
+                             html.H3("Fantasy Scoring Values"),
+
+                             # Row 1 Fantasy Data (Shooting)
+                             html.Div([
+                                 html.H5("5on5 Goal:", style={'margin-right': '5px'}),
+                                 dcc.Input(id='f_goal',
+                                           type='number',
+                                           value=self.fantasy_model.f_scoring['f_goal'],
+                                           style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
+                                           ),
+
+                                 html.H5("PPG:", style={'margin-right': '5px'}),
+                                 dcc.Input(id='f_ppg',
+                                           type='number',
+                                           value=self.fantasy_model.f_scoring['f_ppg'],
+                                           style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
+                                           ),
+
+                                 html.H5("SHG:", style={'margin-right': '5px'}),
+                                 dcc.Input(id='f_shg',
+                                           type='number',
+                                           value=self.fantasy_model.f_scoring['f_shg'],
+                                           style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
+                                           ),
+
+                                 html.H5("SOG:", style={'margin-right': '5px'}),
+                                 dcc.Input(id='f_sog',
+                                           type='number',
+                                           value=self.fantasy_model.f_scoring['f_sog'],
+                                           style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
+                                           )
+
+                             ], style={'display': 'flex', 'align-items': 'center'}
+                             ),
+
+
+                 #Row 2 Fantasy Data (Play Making)
+                 html.Div([
+                     html.H5("5on5 Assist:", style={'margin-right': '5px'}),
+                     dcc.Input(id='f_assist',
+                               type='number',
+                               value=self.fantasy_model.f_scoring['f_assist'],
+                               style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
+                               ),
+
+                     html.H5("PPA:", style={'margin-right': '5px'}),
+                     dcc.Input(id='f_ppa',
+                               type='number',
+                               value=self.fantasy_model.f_scoring['f_ppa'],
+                               style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
+                               ),
+
+                     html.H5("SHA:", style={'margin-right': '5px'}),
+                     dcc.Input(id='f_sha',
+                               type='number',
+                               value=self.fantasy_model.f_scoring['f_sha'],
+                               style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
+                               ),
+
+                     html.H5("Faceoff Wins:", style={'margin-right': '5px'}),
+                     dcc.Input(id='f_faceoff_win',
+                               type='number',
+                               value=self.fantasy_model.f_scoring['f_faceoff_win'],
+                               style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
+                               )
+                 ], style={'display': 'flex', 'align-items': 'center'}
+                 ),
+
+                 # Row 3 Fantasy Data (Other/Physical)
+                 html.Div([
+                     html.H5("Takeaways:", style={'margin-right': '5px'}),
+                     dcc.Input(id='f_takeaway',
+                               type='number',
+                               value=self.fantasy_model.f_scoring['f_takeaway'],
+                               style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
+                               ),
+
+                     html.H5("Giveaways:", style={'margin-right': '5px'}),
+                     dcc.Input(id='f_giveaway',
+                               type='number',
+                               value=self.fantasy_model.f_scoring['f_giveaway'],
+                               style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
+                               ),
+
+                     html.H5("Hits:", style={'margin-right': '5px'}),
+                     dcc.Input(id='f_hit',
+                               type='number',
+                               value=self.fantasy_model.f_scoring['f_hit'],
+                               style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
+                               ),
+
+                     html.H5("Blocks:", style={'margin-right': '5px'}),
+                     dcc.Input(id='f_block',
+                               type='number',
+                               value=self.fantasy_model.f_scoring['f_block'],
+                               style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
+                               )
+                 ], style={'display': 'flex', 'align-items': 'center'}
+                 ),
+                         ]),
+
                 # Slider to represent number of players
                 html.H5("Select Num. Players", style={'margin-top': '1px'}),
                 html.Div([
@@ -151,4 +257,3 @@ class NHLView:
         app = dash.Dash(__name__)
         app.layout = self.layout
         return app
-

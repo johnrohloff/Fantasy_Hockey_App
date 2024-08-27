@@ -21,7 +21,7 @@ class NHLApp:
         self.app = dash.Dash(__name__)
         self.nhl_model = NHLModel(files)
         self.fantasy_model = FantasyModel(files)
-        self.view = NHLView(self.nhl_model)
+        self.view = NHLView(self.nhl_model, self.fantasy_model)
         self.controller = NHLController(self.app, self.nhl_model, self.fantasy_model, self.view)
 
         # Set up the layout
