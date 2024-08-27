@@ -93,6 +93,7 @@ class NHLController:
 
             ###---- Fantasy hockey display ---- ####
             else:
+                #Bar graph display
                 if graph_selected == 'bar':
                     selected_result = dfs.nlargest(slider_val, stat_selected)
                     fig = px.bar(
@@ -101,7 +102,7 @@ class NHLController:
                         y=stat_selected,
                         title=f'Top 10 {position_selected} Ranked By {stat_selected.capitalize()}'
                     )
-
+                #Scatter plot display
                 elif graph_selected == 'scatter':
                     selected_result = dfs.nlargest(slider_val, stat_selected)
                     fig = px.scatter(
@@ -115,20 +116,6 @@ class NHLController:
 
             print(container)
             return dcc.Graph(figure=fig)
-
-        #Callback to update stat_options based on the selected filter (All, PP, PK)
-        @self.app.callback(
-            Output(component_id='select_stat', component_property='options'),
-            [Input(component_id='select_data', component_property='value')]
-        )
-        #Returns the selectable options based on the situation
-        def update_stat_options(select_data):
-            #Real statistics
-            if select_data:
-                return self.nhl_model.all_options
-            #Fantasy Display selected, return fantasy stat options, No 2nd dropdown options
-            else:
-                return self.fantasy_model.f_options
 
         #Callback to update the slider value based on the graph
         @self.app.callback(
@@ -156,20 +143,22 @@ class NHLController:
 
         #Callback for updating selectable dropdowns based on graph chosen
         @self.app.callback(
+            Output(component_id='select_stat', component_property='options'),
+            Output(component_id='select_stat2', component_property='options'),
             Output(component_id='select_stats_block2', component_property='style'),
             [Input(component_id='select_data', component_property='value'),
              Input(component_id='select_graph', component_property='value')]
         )
         #Show/Hide select_stat2 dropdown
         def update_dropdowns(select_data, select_graph):
-            #Real stat display: Show stat filter + stat 2 dropdown
-            if select_data and select_graph == 'scatter':
-                return {'width': "20%", 'display': 'inline-block'}
+            #Real stat display: Show stat 2 dropdown
+            if select_data and select_graph == 'bar':
+                return self.nhl_model.all_options, [], {'width': "20%", 'display': 'none'}
 
             #Real stat display: Show stat filter, don't show stat 2 dropdown
-            elif select_data and select_graph == 'bar':
-                return {'width': "20%", 'display': 'inline-block'}
+            elif select_data and select_graph == 'scatter':
+                return self.nhl_model.all_options, self.nhl_model.all_options, {'width': "20%", 'display': 'inline-block'}
 
-            #Fantasy display: Hide stat filter and stat 2 dropdown
+            #Fantasy display: Hide stat stat 2 dropdown
             else:
-                return  {'width': "20%", 'display': 'none'}
+                return  self.fantasy_model.f_options, [], {'width': "20%", 'display': 'none'}
