@@ -6,6 +6,7 @@ from dash.dependencies import Input, Output
 import model
 from model import NHLModel, FantasyModel
 
+
 class NHLController:
     def __init__(self,app, nhl_model, fantasy_model, view):
         """
@@ -144,6 +145,7 @@ class NHLController:
         #Callback for updating selectable dropdowns based on graph chosen
         @self.app.callback(
             Output(component_id='select_stat', component_property='options'),
+            #Output(component_id='select_stat', component_property='multi'),
             Output(component_id='select_stat2', component_property='options'),
             Output(component_id='select_stats_block2', component_property='style'),
             [Input(component_id='select_data', component_property='value'),
@@ -157,7 +159,8 @@ class NHLController:
 
             #Real stat display: Show stat filter, don't show stat 2 dropdown
             elif select_data and select_graph == 'scatter':
-                return self.nhl_model.all_options, self.nhl_model.all_options, {'width': "20%", 'display': 'inline-block'}
+                return self.nhl_model.all_options,self.nhl_model.all_options, \
+                       {'width': "20%", 'display': 'inline-block'}
 
             #Fantasy display: Hide stat stat 2 dropdown
             else:

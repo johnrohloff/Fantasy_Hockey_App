@@ -102,6 +102,8 @@ class FantasyModel(NHLModel):
         df['f_giveaways'] = df['giveaways'] * scoring['f_giveaway']
         df['f_hits'] = df['hits'] * scoring['f_hit']
         df['f_blocks'] = df['blocked_shots'] * scoring['f_block']
+        df['f_points'] = df[['f_goals', 'f_ppgs', 'f_shgs','f_sogs','f_assists','f_ppas','f_shas',
+                             'f_faceoff_wins','f_takeaways','f_giveaways','f_hits','f_blocks']].sum(axis=1)
         return df
 
     #Default fantasy scores dictionary
