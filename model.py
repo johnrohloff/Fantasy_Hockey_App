@@ -26,18 +26,14 @@ class NHLModel:
             {"label": "Blocked Shots", "value": "blocked_shots"},
             {"label": "Hits", "value": "hits"},
             {"label": "Penalty Mins", "value": "penalty_mins"},
-            {"label": "Penalties Drawn", "value": "penaltiesdrawn"}
-        ]
-
-        #Selectable stats for powerplay situations (5v4, 5v3...)
-        self.pp_options = [{"label": "PP Points", "value": "pp_points"},
+            {"label": "Penalties Drawn", "value": "penaltiesdrawn"},
+            {"label": "PP Points", "value": "pp_points"},
             {"label": "PP Goals", "value": "pp_goals"},
-            {"label": "PP Assists", "value": "pp_assists"}]
-
-        #Selectable stats for penalty kill situations (4v5, 3v5)
-        self.pk_options = [{"label": "PK Points", "value": "pk_points"},
+            {"label": "PP Assists", "value": "pp_assists"},
+            {"label": "PK Points", "value": "pk_points"},
             {"label": "PK Goals", "value": "pk_goals"},
-            {"label": "PK Assists", "value": "pk_assists"}]
+            {"label": "PK Assists", "value": "pk_assists"}
+        ]
 
     #Grabs the dataframe of the selected year
     def get_df(self,year):
@@ -80,11 +76,11 @@ class FantasyModel(NHLModel):
         self.f_options = [
             {"label": "Points", "value": "f_points"},
             {"label": "Goals", "value": "f_goals"},
-            {"label": "PPG", "value": "f_ppg"},
-            {"label": "SHG", "value": "f_shg"},
+            {"label": "PPG", "value": "f_ppgs"},
+            {"label": "SHG", "value": "f_shgs"},
             {"label": "Assists", "value": "f_assists"},
-            {"label": "PPA", "value": "f_ppa"},
-            {"label": "SHA", "value": "f_sha"},
+            {"label": "PPA", "value": "f_ppas"},
+            {"label": "SHA", "value": "f_shas"},
             {"label": "Shots", "value": "f_sogs"},
             {"label": "Takeaways", "value": "f_takeaways"},
             {"label": "Giveaways", "value": "f_giveaways"},

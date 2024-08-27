@@ -39,7 +39,6 @@ class NHLController:
              Input(component_id='select_stat', component_property='value'),
              Input(component_id='select_stat2', component_property='value'),
              Input(component_id='slider_value', component_property='value')
-             # Input(component_id='select_f_stats', component_property='value')
              ]
         )
         def update_graph(data_selected, year_selected, graph_selected, team_selected, position_selected,
@@ -120,23 +119,16 @@ class NHLController:
         #Callback to update stat_options based on the selected filter (All, PP, PK)
         @self.app.callback(
             Output(component_id='select_stat', component_property='options'),
-            Output(component_id='select_stat2', component_property='options'),
-            [Input(component_id='select_data', component_property='value'),
-             Input(component_id='select_stat_filter', component_property='value')]
+            [Input(component_id='select_data', component_property='value')]
         )
         #Returns the selectable options based on the situation
-        def update_stat_options(select_data, stat_filter_selected):
+        def update_stat_options(select_data):
+            #Real statistics
             if select_data:
-                if stat_filter_selected == 'all_situations':
-                    return self.nhl_model.all_options, self.nhl_model.all_options
-                elif stat_filter_selected == 'powerplay':
-                    return self.nhl_model.pp_options, self.nhl_model.pp_options
-                elif stat_filter_selected == 'penalty_kill':
-                    return self.nhl_model.pk_options, self.nhl_model.pk_options
-
+                return self.nhl_model.all_options
             #Fantasy Display selected, return fantasy stat options, No 2nd dropdown options
             else:
-                return self.fantasy_model.f_options, []
+                return self.fantasy_model.f_options
 
         #Callback to update the slider value based on the graph
         @self.app.callback(
@@ -164,7 +156,6 @@ class NHLController:
 
         #Callback for updating selectable dropdowns based on graph chosen
         @self.app.callback(
-            Output(component_id='stat_filter_block', component_property='style'),
             Output(component_id='select_stats_block2', component_property='style'),
             [Input(component_id='select_data', component_property='value'),
              Input(component_id='select_graph', component_property='value')]
@@ -173,12 +164,12 @@ class NHLController:
         def update_dropdowns(select_data, select_graph):
             #Real stat display: Show stat filter + stat 2 dropdown
             if select_data and select_graph == 'scatter':
-                return {'width': "20%", 'display': 'inline-block'}, {'width': "20%", 'display': 'inline-block'}
+                return {'width': "20%", 'display': 'inline-block'}
 
             #Real stat display: Show stat filter, don't show stat 2 dropdown
             elif select_data and select_graph == 'bar':
-                return {'width': "20%", 'display': 'inline-block'}, {'width': "20%", 'display': 'none'}
+                return {'width': "20%", 'display': 'inline-block'}
 
             #Fantasy display: Hide stat filter and stat 2 dropdown
             else:
-                return  {'width': "20%", 'display': 'none'}, {'width': "20%", 'display': 'none'}
+                return  {'width': "20%", 'display': 'none'}
