@@ -21,6 +21,7 @@ class NHLModel:
             {"label": "Goals", "value": "goals"},
             {"label": "Assists", "value": "assists"},
             {"label": "Shots", "value": "shots_on_goal"},
+            {"label": "Faceoffs Won", "value": "faceoffswon"},
             {"label": "Takeaways", "value": "takeaways"},
             {"label": "Giveaways", "value": "giveaways"},
             {"label": "Blocked Shots", "value": "blocked_shots"},
@@ -83,16 +84,17 @@ class FantasyModel(NHLModel):
         self.f_options = [
             {"label": "Points", "value": "f_points"},
             {"label": "Goals", "value": "f_goals"},
-            {"label": "PPG", "value": "f_ppgs"},
-            {"label": "SHG", "value": "f_shgs"},
             {"label": "Assists", "value": "f_assists"},
-            {"label": "PPA", "value": "f_ppas"},
-            {"label": "SHA", "value": "f_shas"},
             {"label": "Shots", "value": "f_sogs"},
+            {"label": "Faceoffs Won", "value": "f_faceoff_wins"},
             {"label": "Takeaways", "value": "f_takeaways"},
             {"label": "Giveaways", "value": "f_giveaways"},
             {"label": "Blocked Shots", "value": "f_blocks"},
             {"label": "Hits", "value": "f_hits"},
+            {"label": "PPG", "value": "f_ppgs"},
+            {"label": "PPA", "value": "f_ppas"},
+            {"label": "SHG", "value": "f_shgs"},
+            {"label": "SHA", "value": "f_shas"},
         ]
 
 
