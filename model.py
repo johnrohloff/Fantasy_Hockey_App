@@ -72,6 +72,13 @@ class FantasyModel(NHLModel):
             'f_block': 0.3,
         }
 
+        #List of independant fantasy input values, used for updating f_scoring
+        self.f_labels = ['f_goal', 'f_ppg', 'f_shg','f_sog','f_assist','f_ppa','f_sha',
+                         'f_faceoff_win','f_takeaway','f_giveaway','f_hit','f_block']
+
+        self.f_categories = ['f_goals', 'f_ppgs', 'f_shgs','f_sogs','f_assists','f_ppas','f_shas',
+                         'f_faceoff_wins','f_takeaways','f_giveaways','f_hits','f_blocks', 'f_points']
+
         # All selectable stats
         self.f_options = [
             {"label": "Points", "value": "f_points"},
@@ -88,9 +95,7 @@ class FantasyModel(NHLModel):
             {"label": "Hits", "value": "f_hits"},
         ]
 
-        #List of fantasy input values, used for updating f_scoring
-        self.f_labels = ['f_goal', 'f_ppg', 'f_shg','f_sog','f_assist','f_ppa','f_sha',
-                         'f_faceoff_win','f_takeaway','f_giveaway','f_hit','f_block']
+
 
     #Create new columns in our dataframe for fantasy scoring
     def calc_fantasy_stats(self, df, scoring):

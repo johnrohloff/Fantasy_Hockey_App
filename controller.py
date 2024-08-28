@@ -105,13 +105,23 @@ class NHLController:
             else:
                 #Bar graph display
                 if graph_selected == 'bar':
-                    selected_result = dfs.nlargest(slider_val, stat_selected)
+
+                    if isinstance(stat_selected,str):
+                        stat_selected = [stat_selected]
+
+                    dfs['total_f_points'] = dfs.loc[:, stat_selected].sum(axis=1)
+                    selected_result = dfs.nlargest(slider_val, 'total_f_points')
+
                     fig = px.bar(
                         selected_result,
                         x='name',
                         y=stat_selected,
-                        title=f'Top 10 {position_selected} Ranked By {stat_selected.capitalize()}'
+                        title='Fantasy Points',
+                        labels={'name': 'Player Name'},
+                        hover_data={'total_f_points': ':.1f'}
                     )
+                    fig.update_layout(barmode='stack')
+
                 #Scatter plot display
                 elif graph_selected == 'scatter':
                     selected_result = dfs.nlargest(slider_val, stat_selected)
@@ -154,6 +164,7 @@ class NHLController:
         #Callback for updating selectable dropdowns based on graph chosen
         @self.app.callback(
             Output(component_id='select_stat', component_property='options'),
+            Output(component_id='select_stat', component_property='multi'),
             Output(component_id='select_stat2', component_property='options'),
             Output(component_id='select_stats_block2', component_property='style'),
             Output(component_id='fantasy_scores_block', component_property='style'),
@@ -167,21 +178,21 @@ class NHLController:
             if select_data:
                 #Show bar graph dropdown format (1 Stat selection dropdown)
                 if select_graph == 'bar':
-                    return self.nhl_model.all_options, [], {'width': "20%", 'display': 'none'},\
+                    return self.nhl_model.all_options, False, [], {'width': "20%", 'display': 'none'},\
                            {'width': "20%", 'display': 'none'}
 
                 #Scatter plot display: (X,Y stat dropdowns)
                 else:
-                    return self.nhl_model.all_options, self.nhl_model.all_options, \
+                    return self.nhl_model.all_options, False, self.nhl_model.all_options, \
                            {'width': "20%", 'display': 'inline-block'}, {'width': "20%", 'display': 'none'}
 
             #Fantasy display
             else:
                 #Bar Graph
                 if select_graph == 'bar':
-                    return self.fantasy_model.f_options, [], {'width': "20%", 'display': 'none'},\
+                    return self.fantasy_model.f_options, True, [], {'width': "20%", 'display': 'none'},\
                        {'width': "50%", 'display': 'inline-block'}
                 #Scatter Plot
                 else:
-                    return self.fantasy_model.f_options, self.fantasy_model.f_options, \
+                    return self.fantasy_model.f_options, False, self.fantasy_model.f_options, \
                            {'width': "20%", 'display': 'inline-block'}, {'width': "20%", 'display': 'none'}
