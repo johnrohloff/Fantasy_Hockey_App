@@ -97,8 +97,6 @@ class FantasyModel(NHLModel):
             {"label": "SHA", "value": "f_shas"},
         ]
 
-
-
     #Create new columns in our dataframe for fantasy scoring
     def calc_fantasy_stats(self, df, scoring):
         df['f_goals'] = df['goals'] * scoring['f_goal']
@@ -120,6 +118,3 @@ class FantasyModel(NHLModel):
     def update_scoring(self, scoring_values):
         self.f_scoring.update(scoring_values)
 
-    #Default fantasy scores dictionary
-    #Update fantasy scores function
-    #

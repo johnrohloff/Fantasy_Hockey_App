@@ -126,13 +126,13 @@ class NHLController:
                 elif graph_selected == 'scatter':
                     selected_result = dfs.nlargest(slider_val, stat_selected)
                     fig = px.scatter(
-                       selected_result,
-                       x=stat2_selected,
-                       y=stat_selected,
-                       title=f'Top 5 {position_selected} Ranked By {stat_selected.capitalize()}',
-                       labels={'name': 'Player Name', stat_selected: stat_selected.capitalize()},
-                       hover_data={'name': True},
-                   )
+                        selected_result,
+                        x=stat2_selected,
+                        y=stat_selected,
+                        title=f'Top {slider_val} Players Ranked By {stat_selected} and {stat2_selected}',
+                        labels={'name': 'Player Name', stat_selected: stat_selected},
+                        hover_data={'name': True},
+                    )
 
             print(container)
             return dcc.Graph(figure=fig)
