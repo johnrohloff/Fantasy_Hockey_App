@@ -100,7 +100,8 @@ class NHLController:
                         selected_result,
                         x='name',
                         y=stat_selected,
-                        title=f'Top 10 {position_selected} Ranked By {stat_selected.capitalize()}'
+                        title=f'Top {slider_val} Players Ranked By {stat_selected.capitalize()}      '
+                              f' Filters: {position_selected}, {team_selected}'
                     )
 
                 #Scatter plot chart
@@ -110,9 +111,10 @@ class NHLController:
                         selected_result,
                         x=stat2_selected,
                         y=stat_selected,
-                        title=f'Top 5 {position_selected} Ranked By {stat_selected.capitalize()}',
-                        labels={'name': 'Player Name', stat_selected: stat_selected.capitalize()},
-                        hover_data={'name': True},
+                        title=f'Top {slider_val} Players Ranked By {stat_selected.capitalize()}'
+                              f' and {stat2_selected.capitalize()}',
+                        labels={'name': 'Player Name', 'team': 'Team', 'position': 'Position'},
+                        hover_data={'name': True, 'team': True, 'position': True}
                     )
 
             ###---- Fantasy hockey display ---- ####
@@ -130,7 +132,7 @@ class NHLController:
                         selected_result,
                         x='name',
                         y=stat_selected,
-                        title='Fantasy Points',
+                        title=f'Top {slider_val} Fantasy Players:',
                         labels={'name': 'Player Name'},
                         hover_data={'total_f_points': ':.1f'}
                     )
@@ -143,9 +145,10 @@ class NHLController:
                         selected_result,
                         x=stat2_selected,
                         y=stat_selected,
-                        title=f'Top {slider_val} Players Ranked By {stat_selected} and {stat2_selected}',
-                        labels={'name': 'Player Name', stat_selected: stat_selected},
-                        hover_data={'name': True},
+                        title=f'Top {slider_val} Players Ranked By {stat_selected.capitalize()}'
+                              f' and {stat2_selected.capitalize()}',
+                        labels={'name': 'Player Name', 'team': 'Team', 'position': 'Position'},
+                        hover_data={'name': True, 'team': True, 'position': True}
                     )
 
             print(container)
