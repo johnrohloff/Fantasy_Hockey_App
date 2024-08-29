@@ -5,7 +5,9 @@ class NHLModel:
         """
         Initialize NHLModel with a list of files
 
-        :param files: A list of CSV file names containing nhl player data, to be loaded into data frames
+        Parameters:
+        files (list): A list of CSV file names containing nhl player data, to be loaded into data frames
+                      Does NOT contain the '.csv' tail
         """
         #List of files given to the model
         self.files = files
@@ -39,10 +41,13 @@ class NHLModel:
     #Grabs the dataframe of the selected year
     def get_df(self,year):
         """
-        Gets the dataframe based on the specified key name
+        Gets the dataframe of the specified year
 
-        :param file: File name (String) without .csv extension
-        :return: Returns the dataframe of the selected file name
+        Parameters:
+        year (str): The year of data we wish to use
+
+        Returns:
+        The dataframe of the selected year
         """
         if year == '2023':
             return self.dfs[0]
@@ -55,6 +60,13 @@ class NHLModel:
 #Subclass of NHLModel, expands and uses the NHLModel data but also incorporates its own features
 class FantasyModel(NHLModel):
     def __init__(self, files):
+        """
+        This class focuses on the fantasy section of the application and contains the data sets, labels, and
+        values used by the view, controller.
+
+        Parameters:
+        files (string): The dataframe loaded in of a specific year
+        """
         super().__init__(files)
 
         #Default fantasy scoring values
@@ -99,6 +111,17 @@ class FantasyModel(NHLModel):
 
     #Create new columns in our dataframe for fantasy scoring
     def calc_fantasy_stats(self, df, scoring):
+        """
+        This function creates new columns in the selected dataset representing fantasy values for each player.
+        Each player's real statistics for the given df is multiplied by the scoring value set in the application
+
+        Parameters:
+        df: The dataframe containing a selected years NHL data
+        scoring (dict): A dictionary of keys (Stat columns) and values (User defined scoring values)
+
+        Returns:
+        df: A dataframe with the new fantasy stats calculated appeneded
+        """
         df['f_goals'] = df['goals'] * scoring['f_goal']
         df['f_ppgs'] = df['pp_goals'] * scoring['f_ppg']
         df['f_shgs'] = df['pk_goals'] * scoring['f_shg']
@@ -116,5 +139,14 @@ class FantasyModel(NHLModel):
         return df
 
     def update_scoring(self, scoring_values):
+        """
+        This function recalculates the fantasy scoring dictionary when given user inputted values
+
+        Parameters:
+        scoring_values (dict): The user given values to be used instead of the default values
+
+        Returns:
+            None
+        """
         self.f_scoring.update(scoring_values)
 

@@ -1,10 +1,6 @@
-import dash
 import plotly.express as px
 from dash import dcc
 from dash.dependencies import Input, Output
-
-import model
-from model import NHLModel, FantasyModel
 
 
 class NHLController:
@@ -40,7 +36,8 @@ class NHLController:
              Input(component_id='select_position', component_property='value'),
              Input(component_id='select_stat', component_property='value'),
              Input(component_id='select_stat2', component_property='value'),
-             Input(component_id='slider_value', component_property='value'),]
+             Input(component_id='slider_value', component_property='value'),
+             ]
             + [Input(component_id=label, component_property='value') for label in self.fantasy_model.f_labels]
         )
         def update_graph(data_selected, year_selected, graph_selected, team_selected, position_selected,
@@ -76,8 +73,9 @@ class NHLController:
             fig = {}
 
             #Selected choices
-            container = f' Real Data: {data_selected}, Year Selected: {year_selected}, Graph Selected: {graph_selected}' \
-                        f'Teams Selected: {team_selected}, Position: {position_selected}, Stat: {stat_selected},' \
+            container = f' Real Data: {data_selected}, Year Selected: {year_selected},' \
+                        f' Graph Selected: {graph_selected} Teams Selected: {team_selected}' \
+                        f' Position: {position_selected}, Stat: {stat_selected},', \
                         f' Stat 2: {stat2_selected}, Slider: {slider_val}'
 
             #Assign dataframe for the selected year
@@ -122,7 +120,7 @@ class NHLController:
                 #Bar graph display
                 if graph_selected == 'bar':
 
-                    if isinstance(stat_selected,str):
+                    if isinstance(stat_selected, str):
                         stat_selected = [stat_selected]
 
                     dfs['total_f_points'] = dfs.loc[:, stat_selected].sum(axis=1)

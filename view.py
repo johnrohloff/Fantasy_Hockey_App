@@ -2,25 +2,32 @@ import dash
 from dash import dcc
 from dash import html
 
-import model
-from model import NHLModel, FantasyModel
-
 
 class NHLView:
-    def __init__(self,nhl_model, fantasy_model):
+    def __init__(self, nhl_model, fantasy_model):
         """
-        Initializes the NHLView class
-        And stores the layout of the application and stores it in the layout attribute.
+        Initializes the NHLView class which creates the Dash application layout
+
+        This class is responsible for creating and formatting the different components
+        that develop and modify the Dash application's visual UI.
+
+        Parameters:
+        nhl_model: NHLModel
+            Model containing real NHL player statistics + team information
+        fantasy_model: FantasyModel
+            Model containing fantasy scoring data sets and scoring settings
         """
         self.nhl_model = nhl_model
         self.fantasy_model = fantasy_model
         self.layout = self.create_layout()
 
-
     def create_layout(self):
         """
-        Creates the layout of the Dash application
-        :return:
+        This function generates the layout of the Dash application by creating
+        the dropdowns, labels, headers etc...
+
+        Returns:
+            html.Div: A Dash Html Div component that contains the application's layout
         """
         return html.Div([
             # Header
@@ -165,70 +172,69 @@ class NHLView:
                              ], style={'display': 'flex', 'align-items': 'center'}
                              ),
 
+                             #Row 2 Fantasy Data (Play Making)
+                             html.Div([
+                                 html.H5("5on5 Assist:", style={'margin-right': '5px'}),
+                                 dcc.Input(id='f_assist',
+                                           type='number',
+                                           value=self.fantasy_model.f_scoring['f_assist'],
+                                           style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
+                                           ),
 
-                 #Row 2 Fantasy Data (Play Making)
-                 html.Div([
-                     html.H5("5on5 Assist:", style={'margin-right': '5px'}),
-                     dcc.Input(id='f_assist',
-                               type='number',
-                               value=self.fantasy_model.f_scoring['f_assist'],
-                               style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
-                               ),
+                                 html.H5("PPA:", style={'margin-right': '5px'}),
+                                 dcc.Input(id='f_ppa',
+                                           type='number',
+                                           value=self.fantasy_model.f_scoring['f_ppa'],
+                                           style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
+                                           ),
 
-                     html.H5("PPA:", style={'margin-right': '5px'}),
-                     dcc.Input(id='f_ppa',
-                               type='number',
-                               value=self.fantasy_model.f_scoring['f_ppa'],
-                               style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
-                               ),
+                                 html.H5("SHA:", style={'margin-right': '5px'}),
+                                 dcc.Input(id='f_sha',
+                                           type='number',
+                                           value=self.fantasy_model.f_scoring['f_sha'],
+                                           style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
+                                           ),
 
-                     html.H5("SHA:", style={'margin-right': '5px'}),
-                     dcc.Input(id='f_sha',
-                               type='number',
-                               value=self.fantasy_model.f_scoring['f_sha'],
-                               style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
-                               ),
+                                 html.H5("Faceoff Wins:", style={'margin-right': '5px'}),
+                                 dcc.Input(id='f_faceoff_win',
+                                           type='number',
+                                           value=self.fantasy_model.f_scoring['f_faceoff_win'],
+                                           style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
+                                           )
+                             ], style={'display': 'flex', 'align-items': 'center'}
+                             ),
 
-                     html.H5("Faceoff Wins:", style={'margin-right': '5px'}),
-                     dcc.Input(id='f_faceoff_win',
-                               type='number',
-                               value=self.fantasy_model.f_scoring['f_faceoff_win'],
-                               style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
-                               )
-                 ], style={'display': 'flex', 'align-items': 'center'}
-                 ),
+                             # Row 3 Fantasy Data (Other/Physical)
+                             html.Div([
+                                 html.H5("Takeaways:", style={'margin-right': '5px'}),
+                                 dcc.Input(id='f_takeaway',
+                                           type='number',
+                                           value=self.fantasy_model.f_scoring['f_takeaway'],
+                                           style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
+                                           ),
 
-                 # Row 3 Fantasy Data (Other/Physical)
-                 html.Div([
-                     html.H5("Takeaways:", style={'margin-right': '5px'}),
-                     dcc.Input(id='f_takeaway',
-                               type='number',
-                               value=self.fantasy_model.f_scoring['f_takeaway'],
-                               style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
-                               ),
+                                 html.H5("Giveaways:", style={'margin-right': '5px'}),
+                                 dcc.Input(id='f_giveaway',
+                                           type='number',
+                                           value=self.fantasy_model.f_scoring['f_giveaway'],
+                                           style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
+                                           ),
 
-                     html.H5("Giveaways:", style={'margin-right': '5px'}),
-                     dcc.Input(id='f_giveaway',
-                               type='number',
-                               value=self.fantasy_model.f_scoring['f_giveaway'],
-                               style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
-                               ),
+                                 html.H5("Hits:", style={'margin-right': '5px'}),
+                                 dcc.Input(id='f_hit',
+                                           type='number',
+                                           value=self.fantasy_model.f_scoring['f_hit'],
+                                           style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
+                                           ),
 
-                     html.H5("Hits:", style={'margin-right': '5px'}),
-                     dcc.Input(id='f_hit',
-                               type='number',
-                               value=self.fantasy_model.f_scoring['f_hit'],
-                               style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
-                               ),
-
-                     html.H5("Blocks:", style={'margin-right': '5px'}),
-                     dcc.Input(id='f_block',
-                               type='number',
-                               value=self.fantasy_model.f_scoring['f_block'],
-                               style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
-                               )
-                 ], style={'display': 'flex', 'align-items': 'center'}
-                 ),
+                                 html.H5("Blocks:", style={'margin-right': '5px'}),
+                                 dcc.Input(id='f_block',
+                                           type='number',
+                                           value=self.fantasy_model.f_scoring['f_block'],
+                                           style={'width': '20%', 'display': 'inline-block', 'margin-right': '10px'}
+                                           )
+                             ], style={'display': 'flex', 'align-items': 'center'}
+                             ),
                          ]),
 
                 # Slider to represent number of players
@@ -252,7 +258,9 @@ class NHLView:
     def create_app(self):
         """
         Creates + Returns a Dash app instance
-        :return:
+
+        Returns:
+            app: A configured Dash app instance
         """
         app = dash.Dash(__name__)
         app.layout = self.layout
