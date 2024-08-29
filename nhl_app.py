@@ -50,6 +50,6 @@ class NHLApp:
 
 #Starts the application and provides the required data files for the server.
 if __name__ == '__main__':
-    files = ['skaters_23', 'skaters_22']
+    files = ['skaters_24', 'skaters_23', 'skaters_22', 'skaters_21', 'skaters_20']
     app = NHLApp(files)
     app.run()

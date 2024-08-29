@@ -49,7 +49,7 @@ class NHLController:
             Parameters:
             data_selected (str):    A selected value representing the choice of displaying real statistics
                                     or fantasy statistics
-            year_selected (str):    A selected value representing the statistical year to reference
+            year_selected (str):    A selected value representing the statistical year to reference (2020-2024)
             graph_selected (str):   A selected value representing the graph to be displayed (Bar or Scatter plot)
             team_selected (str):    Selected dropdown value representing selected team(s) to display
                                     their player's stats

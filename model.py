@@ -7,7 +7,7 @@ class NHLModel:
 
         Parameters:
         files (list): A list of CSV file names containing nhl player data, to be loaded into data frames
-                      Does NOT contain the '.csv' tail
+                      Does NOT contain the '.csv' extension
         """
         #List of files given to the model
         self.files = files
@@ -49,12 +49,20 @@ class NHLModel:
         Returns:
         The dataframe of the selected year
         """
-        if year == '2023':
-            return self.dfs[0]
-        elif year == '2022':
-            return self.dfs[1]
-        else:
-            return None
+
+        match year:
+            case'2024':
+                return self.dfs[0]
+            case '2023':
+                return self.dfs[1]
+            case '2022':
+                return self.dfs[2]
+            case '2021':
+                return self.dfs[3]
+            case '2020':
+                return self.dfs[4]
+            case _:
+                return None
 
 
 #Subclass of NHLModel, expands and uses the NHLModel data but also incorporates its own features
