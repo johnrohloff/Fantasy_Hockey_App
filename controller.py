@@ -8,13 +8,14 @@ from model import NHLModel, FantasyModel
 
 
 class NHLController:
-    def __init__(self,app, nhl_model, fantasy_model, view):
+    def __init__(self, app, nhl_model, fantasy_model, view):
         """
         Initialize NHLController class
 
         Sets up the connection between app, model and view
         :param app: Dash app instance
-        :param model: NHLModel instance which contains data, getters, setters
+        :param nhl_model: NHLModel instance, contains data, getters, setters for the real stats display
+        :param fantasy_model: FantasyModel instance which contains data, getters, setters for the fantasy display
         :param view: NHLView instance which contains the UI
 
         """
@@ -26,9 +27,9 @@ class NHLController:
 
     def register_callbacks(self):
         """
-        Handles callbacks for the Dash app
-
-        :return: None
+        This function receives the inputs given by the UI and modifies the display based on the chosen selections
+        The output is the resulting selections to make the display the selected stats and settings.
+        :return:
         """
         @self.app.callback(
             Output(component_id='output_container', component_property='children'),
@@ -45,21 +46,36 @@ class NHLController:
         def update_graph(data_selected, year_selected, graph_selected, team_selected, position_selected,
                          stat_selected, stat2_selected, slider_val, *f_inputs):
             """
-            Updates the output_container based on the selected choice
-            :param data_selected:
-            :return: Selected choice
+            This function takes multiple inputs and modifies the display based on the user's selections and
+            updated inputs (if modifying fantasy values)
+
+            Parameters:
+            data_selected (str):    A selected value representing the choice of displaying real statistics
+                                    or fantasy statistics
+            year_selected (str):    A selected value representing the statistical year to reference
+            graph_selected (str):   A selected value representing the graph to be displayed (Bar or Scatter plot)
+            team_selected (str):    Selected dropdown value representing selected team(s) to display
+                                    their player's stats
+            position_selected (str):Filters the data represented by the chosen position (L,R,C D)
+            stat_selected (str):    Displays the selected stat(s) to the graph chosen
+            stat2_selected (str or None): The secondary stat to be displayed if chosen
+            slider_val: (int):      The int representing the number of players to display on the graph (1-1000 players)
+            f_inputs: (float):      Customisable fantasy stat values. These are modifiable and will update
+                                    the fantasy display based on the given user input.
+
+            returns: A dash component is returned configured to user selected values
             """
 
-            # Convert f_inputs to a dictionary if needed
+            # Convert f_inputs to a dictionary
             f_inputs_dict = dict(zip(self.fantasy_model.f_labels, f_inputs))
 
-            # Update your model with the fantasy inputs
+            # Updated fantasy inputs from user input
             updated_f_scoring = {label: value for label, value in f_inputs_dict.items()}
             self.fantasy_model.update_scoring(updated_f_scoring)
 
-
             fig = {}
 
+            #Selected choices
             container = f' Real Data: {data_selected}, Year Selected: {year_selected}, Graph Selected: {graph_selected}' \
                         f'Teams Selected: {team_selected}, Position: {position_selected}, Stat: {stat_selected},' \
                         f' Stat 2: {stat2_selected}, Slider: {slider_val}'
@@ -147,12 +163,26 @@ class NHLController:
         )
         #Changes the range of values for bar/scatter graphs
         def update_slider_val(select_graph):
+            """
+            Updates the slider's min,max,step and marks values displayed based on the selected graph
+
+            Parameters:
+            select_graph (str): The selected graph (bar or scatter)
+
+            Returns:
+            marks_val (int): New range for the slider (0-100 or 0-500)
+            max_val (int): Max value for the slider (100 or 500)
+            min_val (int): Min value for the slider (0)
+            step_val (int): Step value for the slider (10 or 50)
+            """
+            #Set the slider's range and values for the bar graph
             if select_graph == 'bar':
                 marks_val = {i: str(i) for i in range(0, 101, 10)}
                 max_val = 100
                 min_val = 0
                 step_val = 10
 
+            #Set the slider's range and values for the scatter plot
             else:
                 marks_val = {i: str(i) for i in range(0, 501, 50)}
                 max_val = 500
@@ -174,6 +204,36 @@ class NHLController:
         )
         #Show/Hide select_stat2 dropdown
         def update_dropdowns(select_data, select_graph):
+            """
+            Updates the select_stat, select_stat2 dropdowns and displays/hides the select_stat2 dropdown and
+            custom fantasy stat values based on user selections.
+
+            Parameters:
+            select_data (str):  Selectable dropdown value representing real/fantasy statistics displayed
+            select_graph (str): Selectable graph to display the selected stats (bar/scatter plot)
+
+            Returns:
+            select_stat: options
+                bar: Real stat selections OR Fantasy stat selections
+                scatter: Real stat selections OR Fantasy stat selections
+
+            select_stat: multi
+                True: Allow multiple selections for the 1st stat selection
+                False: 1 selection allowed for stat selection
+
+            select_stat2: options
+                []: None
+                all_options: Real stat selection options
+                f_options: Fantasy stat selection options
+
+            select_stats_block2: style
+                none: No display for the secondary stat block
+                inline-block: Visible secondary stat block
+
+            fantasy_scores_block: style
+                none: No display for the fantasy scores block
+                inline-block: Visible fantasy stat block
+            """
             #Real data display
             if select_data:
                 #Show bar graph dropdown format (1 Stat selection dropdown)
@@ -195,4 +255,4 @@ class NHLController:
                 #Scatter Plot
                 else:
                     return self.fantasy_model.f_options, False, self.fantasy_model.f_options, \
-                           {'width': "20%", 'display': 'inline-block'}, {'width': "20%", 'display': 'none'}
+                           {'width': "20%", 'display': 'inline-block'}, {'width': "50%", 'display': 'inline-block'}
