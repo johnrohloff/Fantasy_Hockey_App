@@ -125,7 +125,7 @@ class NHLController:
                     if isinstance(stat_selected, str):
                         stat_selected = [stat_selected]
 
-                    dfs['total_f_points'] = dfs.loc[:, stat_selected].sum(axis=1)
+                    dfs.loc[:, 'total_f_points'] = dfs.loc[:, stat_selected].sum(axis=1).astype(float)
                     selected_result = dfs.nlargest(slider_val, 'total_f_points')
 
                     fig = px.bar(
@@ -145,8 +145,8 @@ class NHLController:
                         selected_result,
                         x=stat2_selected,
                         y=stat_selected,
-                        title=f'Top {slider_val} Players Ranked By {stat_selected.capitalize()}'
-                              f' and {stat2_selected.capitalize()}',
+                        title=f'Top {slider_val} Players Ranked By {stat_selected}'
+                              f' and {stat2_selected}',
                         labels={'name': 'Player Name', 'team': 'Team', 'position': 'Position'},
                         hover_data={'name': True, 'team': True, 'position': True}
                     )

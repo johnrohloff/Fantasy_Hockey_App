@@ -65,7 +65,7 @@ class NHLView:
 
                                           ],
                                           multi=False,
-                                          value="2023",
+                                          value="2024",
                                           ),
                          ], style={'width': "20%", 'display': 'inline-block'}
                          ),
