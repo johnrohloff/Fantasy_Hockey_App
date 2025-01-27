@@ -101,7 +101,11 @@ class NHLController:
                         x='name',
                         y=stat_selected,
                         title=f'Top {slider_val} Players Ranked By {stat_selected.capitalize()}      '
-                              f' Filters: {position_selected}, {team_selected}'
+                              f' Filters: {position_selected}, Teams: {team_selected}',
+                        color=selected_result[stat_selected],
+                        color_continuous_scale='Bluered_r',
+                        hover_data={'name': True, 'team': True, 'position': True}
+
                     )
 
                 #Scatter plot chart
@@ -113,6 +117,8 @@ class NHLController:
                         y=stat_selected,
                         title=f'Top {slider_val} Players Ranked By {stat_selected.capitalize()}'
                               f' and {stat2_selected.capitalize()}',
+                        color=selected_result[stat_selected],
+                        color_continuous_scale='Bluered_r',
                         labels={'name': 'Player Name', 'team': 'Team', 'position': 'Position'},
                         hover_data={'name': True, 'team': True, 'position': True}
                     )
@@ -133,6 +139,8 @@ class NHLController:
                         x='name',
                         y=stat_selected,
                         title=f'Top {slider_val} Fantasy Players:',
+                        color=selected_result[stat_selected],
+                        color_continuous_scale='Bluered_r',
                         labels={'name': 'Player Name'},
                         hover_data={'total_f_points': ':.1f'}
                     )
@@ -147,6 +155,8 @@ class NHLController:
                         y=stat_selected,
                         title=f'Top {slider_val} Players Ranked By {stat_selected}'
                               f' and {stat2_selected}',
+                        color=selected_result[stat_selected],
+                        color_continuous_scale='Bluered_r',
                         labels={'name': 'Player Name', 'team': 'Team', 'position': 'Position'},
                         hover_data={'name': True, 'team': True, 'position': True}
                     )

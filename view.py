@@ -36,7 +36,6 @@ class NHLView:
             # All UI Blocks
             html.Div([
 
-
                 html.Div(id="data_block",
                          children=[
                              html.H5("Data Displayed:", style={'margin-top': '1px'}),
