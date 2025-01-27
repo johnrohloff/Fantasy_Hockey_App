@@ -114,6 +114,7 @@ class NHLView:
                          ),
 
                 # Statistic to show (ie. Points/Goals/Assists)
+                html.Div([
                 html.Div(id="select_stats_block",
                          children=[
                              html.H5("Select Stats", style={'margin-top': '1px'}),
@@ -136,11 +137,12 @@ class NHLView:
                                           ),
                          ], style={'width': "20%", 'display': 'none'}
                          ),
+                    ]),
 
                 #Fantasy Scoring Inputs
-                html.Div(id='fantasy_scores_block', style={'display': 'none'},
+                html.Div(id='fantasy_scores_block', style={'width': "20%", 'display': 'none'},
                          children=[
-                             html.H3("Fantasy Scoring Values"),
+                             html.H3("Fantasy Scoring Values", style={'text-align': 'center'}),
 
                              # Row 1 Fantasy Data (Shooting)
                              html.Div([

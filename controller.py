@@ -139,8 +139,6 @@ class NHLController:
                         x='name',
                         y=stat_selected,
                         title=f'Top {slider_val} Fantasy Players:',
-                        color=selected_result[stat_selected],
-                        color_continuous_scale='Bluered_r',
                         labels={'name': 'Player Name'},
                         hover_data={'total_f_points': ':.1f'}
                     )
