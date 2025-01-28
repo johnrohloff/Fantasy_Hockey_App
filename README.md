@@ -13,22 +13,27 @@ The program follows a simple MVC format to display a bar/scatter plot of the sel
 modify the fantasy value of these stats.
 
 
-<b> Example Displays: </b>
+<b><u> Example Displays: </b></u>
+<br></br>
 
 <b>Bar graph for the 2023-2024 season for the metropolitan teams C,LW goals. </b>
-<img src="nhl_img/Goals_Metro_23.png"/>
+<img src="nhl_img/Goals_Metro_23.png" height="120%" width="120%"/>
+<br></br>
 
 <b>Scatter plot of the 2023-24 season for all teams, all positions, top 500 players in takeaways(Y) and giveaways(X) </b>
-<img src="nhl_img/T_G_23.png"/>
+<img src="nhl_img/T_G_23.png" height="120%" width="120%"/>
+<br></br>
 
 <b>Fantasy hockey scatter plot: 2022-23 season, all teams, all positions, Goals(Y), Shots(X), top 200 players </b>
-<img src="nhl_img/F_Scatter_22.png"/>
+<img src="nhl_img/F_Scatter_22.png" height="120%" width="120%"/>
+<br></br>
 
 <b>Fantasy hockey bar graph: 2022-23 season, all teams, all positions, various stats for the top 20 players</b>
-<img src="nhl_img/F_Bar_22.png"/>
+<img src="nhl_img/F_Bar_22.png" height="120%" width="120%"/>
+<br></br>
 
 <b>Fantasy hockey bar graph: 2022-23 season, all teams, all positions, various stats using unique fantasy stat values for the top 70 players.</b>
-<img src="nhl_img/F_bar_updated_22.png"/>
+<img src="nhl_img/F_bar_updated_22.png" height="120%" width="120%"/>
 
 
 
